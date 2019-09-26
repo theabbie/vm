@@ -2,6 +2,10 @@ const express = require('express');
 
 const app = express();
 
+app.get("/home", (req,res) => {
+res.sendFile(__dirname+'/index.html');
+});
+
 app.get('/*', (req, res) => {
     res.writeHead(200, {
         'Content-Type': 'text/event-stream',

